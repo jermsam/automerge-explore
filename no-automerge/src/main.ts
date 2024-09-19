@@ -10,7 +10,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
      <main class="relative w-full " >
      
        <section id="container" class="absolute  w-full">
-          <div class="mb-4 z-10  p-4 sticky top-0 flex flex-col gap-2 bg-[url('assets/bg-mobile-dark.jpg')] md:bg-[url('assets/bg-desktop-dark.jpg')] bg-cover bg-no-repeat">
+          <div class="mb-4 z-10  p-4 sticky top-0 flex flex-col gap-2 bg-[url('assets/bg-mobile-dark.jpg')] md:bg-[url('assets/bg-desktop-dark.jpg')] bg-cover bg-no-repeat bg-center">
            <header class=" max-w-xl mx-auto px-4 flex w-full  justify-between gap-10 items-center mt-[2rem] mb-[1rem]">
             <h1 class="text-gray-50  text-xl md:text-2xl font-bold">TODO</h1>
             <span class="inline-block w-6 h-6 bg-[url('assets/sun.svg')] bg-contain bg-no-repeat"></span>
