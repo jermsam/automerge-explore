@@ -1,3 +1,65 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Reset margins and paddings, set box-sizing to border-box */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Ensure inherited box-sizing for pseudo-elements */
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+/* Set global box-sizing and basic styles for the HTML and body */
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth; /* Optional for smoother scrolling */
+}
+
+body {
+    font-family: sans-serif; /* Choose your preferred font */
+    line-height: 1.5;
+    min-height: 100vh; /* Ensure the body is at least the height of the viewport */
+    background-color: hsl(235, 21%, 11%); /* Background color (change to your design needs) */
+    -webkit-font-smoothing: antialiased; /* Improve text rendering in some browsers */
+    -moz-osx-font-smoothing: grayscale;  /* For Firefox text rendering */
+    display: grid;
+}
+
+.todo-form {
+
+    &::before {
+        content: "⚽";
+        font-weight: 400;
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-50%);
+        color: rgb(119, 122, 146);
+        opacity: 0.5;
+    }
+}
+.list-info{
+
+}
+
+.list-info p span {
+    margin-right: 1rem;
+}
+
+.list-info button {
+    background: transparent;
+    border: 0;
+    color: rgb(119, 122, 146);
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 0.8rem;
+
+    &:hover {
+        color: hsl(220, 98%, 61%);
+        cursor: pointer;
+    }
+}
