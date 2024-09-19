@@ -3,9 +3,9 @@ import {setup} from './todos.ts';
 
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <h1>Automerge Todo</h1>
-    <div style="display: flex; gap: 2px; justify-content: center;">
+  <div class="flex flex-col items-center gap-10">
+    <h1 class="text-3xl font-bold ">Automerge Todo</h1>
+    <div class="flex justify-center gap-10">
     <input id="input"/>
       <button id="add" type="button">+</button>
     </div>
