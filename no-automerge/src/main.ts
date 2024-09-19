@@ -7,7 +7,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="bg-[url('assets/bg-mobile-dark.jpg')] md:bg-[url('assets/bg-desktop-dark.jpg')] bg-cover bg-no-repeat h-[30%] ">
     <div class="h-full px-4 max-w-xl mx-auto flex flex-col items-center justify-center">
    <header class="flex w-full  justify-between gap-10 items-center mt-[2rem] mb-[1rem]">
-      <h1 class="text-gray-50  text-xl md:text-2xl font-bold">AUTOMERGE TODO</h1>
+      <h1 class="text-gray-50  text-xl md:text-2xl font-bold">TODO</h1>
       <span class="inline-block w-6 h-6 bg-[url('assets/sun.svg')] bg-contain bg-no-repeat"></span>
     </header>
      <main class="relative w-full">
