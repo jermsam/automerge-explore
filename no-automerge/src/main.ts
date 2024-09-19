@@ -19,7 +19,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
           <input
             id="todo-input"
             type="text"
-            class="  w-full bg-[rgb(37,39,60)] px-12 py-4 rounded-[5px] border-0 focus:text-[hsl(234,39%,85%)]"
+            class="w-full bg-[rgb(37,39,60)] px-12 py-4 rounded-[5px] border-0 focus:text-[hsl(234,39%,85%)] text-[rgb(119,122,146)]"
             placeholder="Create a new todo..."
           />
           </div>

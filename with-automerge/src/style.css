@@ -28,7 +28,10 @@ body {
     -webkit-font-smoothing: antialiased; /* Improve text rendering in some browsers */
     -moz-osx-font-smoothing: grayscale;  /* For Firefox text rendering */
     display: grid;
+    overflow: hidden;
 }
+
+
 
 .todo-form {
 
@@ -85,5 +88,17 @@ body {
 
     .fa-times {
         @apply text-[rgb(119,122,146)] text-[1.1rem] opacity-40;
+    }
+}
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
     }
 }
