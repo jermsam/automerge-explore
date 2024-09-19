@@ -2,6 +2,7 @@ import './style.css'
 import {setup} from './todos.ts';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
+// Thanks to: https://www.frontendmentor.io/solutions/todo-list-app-vanilla-javascript-scss-vite-QTiJq9-dkD
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="bg-[url('assets/bg-mobile-dark.jpg')] md:bg-[url('assets/bg-desktop-dark.jpg')] bg-cover bg-no-repeat h-[30%] ">
