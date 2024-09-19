@@ -1,11 +1,5 @@
-import type {TodoItem} from './types';
+import {TodoItem} from './types';
 import {taskList} from './data.ts';
-
-function scrollToBottom(list: HTMLUListElement) {
-  // Scroll to the bottom to ensure the latest item is visible
-  const parent = list.parentElement as HTMLElement;
-  parent.scrollTop = parent.scrollHeight;
-}
 
 function updateData(data: TodoItem[]=[]) {
   const tasks = Array.from(document.querySelectorAll("li")).map((liEl) => ({
@@ -16,7 +10,7 @@ function updateData(data: TodoItem[]=[]) {
   data.push(...tasks);
 }
 
-function updateListLength(todoList: HTMLUListElement) {
+function updateListLength(todoList: HTMLLIElement) {
   let count = 0;
   for (let item of todoList.children) {
     if (!item.firstElementChild?.classList.contains("completed")) {
@@ -27,7 +21,7 @@ function updateListLength(todoList: HTMLUListElement) {
   listLength.innerText = String(count);
 }
 
-function deleteCompletedTasks(todoList: HTMLUListElement) {
+function deleteCompletedTasks(todoList: HTMLLIElement) {
   const todoItems = Array.from(todoList.children);
   todoItems.forEach((item) => {
     if (item.firstElementChild?.classList.contains("completed")) {
@@ -38,7 +32,7 @@ function deleteCompletedTasks(todoList: HTMLUListElement) {
   updateListLength(todoList);
 }
 
-function createTaskItem(task: TodoItem, todoList: HTMLUListElement) {
+function createTaskItem(task: TodoItem, todoList: HTMLLIElement) {
   //Create List Item
   const listItem = document.createElement("li");
   listItem.classList.add("item");
@@ -51,7 +45,7 @@ function createTaskItem(task: TodoItem, todoList: HTMLUListElement) {
 
   //Append styleSpan to listItem
   listItem.appendChild(styleSpan);
-  const firstListElement = listItem.firstElementChild as HTMLUListElement;
+  const firstListElement = listItem.firstElementChild as HTMLLIElement;
 
   if (task.completed) {
     if(firstListElement) {
@@ -76,7 +70,6 @@ function createTaskItem(task: TodoItem, todoList: HTMLUListElement) {
 
     updateData(taskList);
     updateListLength(todoList);
-
   });
 
   //Create Delete Button
@@ -92,19 +85,11 @@ function createTaskItem(task: TodoItem, todoList: HTMLUListElement) {
   styleSpan.prepend(completedBtn);
   listItem.appendChild(deleteBtn);
   todoList.appendChild(listItem);
-  // Scroll to the bottom after adding the new task
-  // Scroll to the bottom after adding the new task
-  listItem.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-  // Scroll the control bar into view after adding a task
-  const controlBar = document.getElementById("control-bar") as HTMLElement;
-  controlBar.scrollIntoView({ behavior: "smooth", block: "end" });
-
 }
 
 
-export function setup(input:HTMLInputElement , todoList: HTMLUListElement, clearButton: HTMLButtonElement) {
-  scrollToBottom(todoList)
+export function setup(input:HTMLInputElement , todoList: HTMLLIElement, clearButton: HTMLButtonElement) {
+  console.log(input,todoList);
   taskList.forEach(task => createTaskItem(task,todoList))
   input.addEventListener("keyup", event => {
     event.preventDefault();
@@ -114,7 +99,6 @@ export function setup(input:HTMLInputElement , todoList: HTMLUListElement, clear
       createTaskItem({ contents: newTask, completed: false }, todoList);
       input.value = "";
     }
-    scrollToBottom(todoList)
   })
   clearButton.addEventListener("click", event => {
     event.preventDefault();
@@ -125,7 +109,7 @@ export function setup(input:HTMLInputElement , todoList: HTMLUListElement, clear
   filterOptions.forEach((input: HTMLInputElement) => {
     input.addEventListener("change", () => {
       const filter = input.value;
-      const todoItems = Array.from(todoList.children) as HTMLUListElement[];
+      const todoItems = Array.from(todoList.children) as HTMLLIElement[];
       todoItems.forEach((item) => {
         switch (filter) {
           case "all":
