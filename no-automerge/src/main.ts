@@ -25,7 +25,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
           </div>
         </div>
   
-          <div  class="flex flex-col overflow-y-auto no-scrollbar h-[76.5vh]   max-w-xl mx-auto px-4 ">
+          <div  class="flex flex-col overflow-y-auto no-scrollbar h-[78.4vh] max-w-xl mx-auto px-4 ">
                 <ul id="todo-list" class="flex flex-col gap-2 bg-[rgb(37,39,60)] rounded "></ul>
                 <div id="control-bar" class="flex list-info justify-between items-center bg-[hsl(235,24%,19%)] text-[rgb(119,122,146)] text-[0.8rem] p-4 rounded-[5px]">
                   <p><span id="list-length" class="length-num">0</span>items left</p>
