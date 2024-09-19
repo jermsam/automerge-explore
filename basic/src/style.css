@@ -63,3 +63,27 @@ body {
         cursor: pointer;
     }
 }
+
+@layer components {
+    .item {
+        @apply flex justify-between text-[hsl(233,11%,84%)] gap-2 text-[0.9rem] p-4 border-b-[rgb(119,122,146,0.3)] border-b border-solid hover:cursor-pointer;
+    }
+    .completed {
+        @apply line-through text-[#777a92];
+    }
+
+    .fa-circle {
+        @apply text-[1.1rem] opacity-20 mr-4 hover:cursor-pointer;
+    }
+
+    .fa-solid {
+        @apply bg-clip-text text-transparent text-[1.1rem] opacity-100 mr-4;
+        background: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .fa-times {
+        @apply text-[rgb(119,122,146)] text-[1.1rem] opacity-40;
+    }
+}
