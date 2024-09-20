@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset margins and paddings, set box-sizing to border-box */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Ensure inherited box-sizing for pseudo-elements */
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+/* Set global box-sizing and basic styles for the HTML and body */
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth; /* Optional for smoother scrolling */
+}
+
+body {
+    font-family: sans-serif; /* Choose your preferred font */
+    line-height: 1.5;
+    min-height: 100vh; /* Ensure the body is at least the height of the viewport */
+    background-color: hsl(235, 21%, 11%); /* Background color (change to your design needs) */
+    -webkit-font-smoothing: antialiased; /* Improve text rendering in some browsers */
+    -moz-osx-font-smoothing: grayscale;  /* For Firefox text rendering */
+    display: grid;
+    overflow: hidden;
+}
+
+
+
+.todo-form {
+
+    &::before {
+        content: "⚽";
+        font-weight: 400;
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-50%);
+        color: rgb(119, 122, 146);
+        opacity: 0.5;
+    }
+}
+.list-info{
+
+}
+
+.list-info p span {
+    margin-right: 1rem;
+}
+
+.list-info button {
+    background: transparent;
+    border: 0;
+    color: rgb(119, 122, 146);
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 0.8rem;
+
+    &:hover {
+        color: hsl(220, 98%, 61%);
+        cursor: pointer;
+    }
+}
+
+@layer components {
+    .item {
+        @apply flex justify-between text-[hsl(233,11%,84%)] gap-2 text-[0.9rem] p-4 border-b-[rgb(119,122,146,0.3)] border-b border-solid hover:cursor-pointer;
+    }
+    .completed {
+        @apply line-through text-[#777a92];
+    }
+
+    .fa-circle {
+        @apply text-[1.1rem] opacity-20 mr-4 hover:cursor-pointer;
+    }
+
+    .fa-solid {
+        @apply bg-clip-text text-transparent text-[1.1rem] opacity-100 mr-4;
+        background: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .fa-times {
+        @apply text-[rgb(119,122,146)] text-[1.1rem] opacity-40;
+    }
+}
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+}
