@@ -1,6 +1,7 @@
 import type {TodoItem} from './types';
 // import {taskList} from './data.ts';
 import {broadcast, getOrCreateHandle} from './handle-automerge.ts';
+import QrCodeWithLogo from 'qrcode-with-logos';
 
 // Get or create the document
 const rootDocUrl = document.location.hash.substring(1);
@@ -15,7 +16,6 @@ function scrollToBottom(list: HTMLUListElement) {
   const parent = list.parentElement as HTMLElement;
   parent.scrollTop = parent.scrollHeight;
 }
-
 
 
 function updateListLength(tasks: TodoItem[]) {
@@ -35,13 +35,13 @@ const updateTodo = (index: any, newValue: TodoItem) => {
   handle.change((doc) => {
     doc.tasks.splice(index, 1, newValue);
   });
-}
+};
 
 const deleteTodo = (index: any) => {
   handle.change((doc) => {
     doc.tasks.splice(index, 1);
   });
-}
+};
 
 const deleteCompletedTasks = () => {
   handle.change((doc) => {
@@ -57,8 +57,7 @@ const deleteCompletedTasks = () => {
 };
 
 
-
-function createTaskItem(index: number,task: TodoItem, todoList: HTMLUListElement) {
+function createTaskItem(index: number, task: TodoItem, todoList: HTMLUListElement) {
   //Create List Item
   const listItem = document.createElement('li');
   listItem.classList.add('item');
@@ -80,7 +79,6 @@ function createTaskItem(index: number,task: TodoItem, todoList: HTMLUListElement
   }
 
 
-
   //Create Completed Button
   const completedBtn = document.createElement('i');
   completedBtn.className = 'fa-regular fa-circle';
@@ -95,7 +93,7 @@ function createTaskItem(index: number,task: TodoItem, todoList: HTMLUListElement
 
   completedBtn.addEventListener('click', async () => {
     const updatedTask = Object.assign({}, {...task, completed: !task.completed});
-    updateTodo(index, updatedTask)
+    updateTodo(index, updatedTask);
     await renderTasks(todoList);
   });
 
@@ -103,7 +101,7 @@ function createTaskItem(index: number,task: TodoItem, todoList: HTMLUListElement
   const deleteBtn = document.createElement('i');
   deleteBtn.className = 'fas fa-times';
   deleteBtn.addEventListener('click', async () => {
-    deleteTodo(index)
+    deleteTodo(index);
     await renderTasks(todoList);
   });
 
@@ -126,7 +124,7 @@ const renderTasks = async (todoList: HTMLUListElement) => {
   let tasks: TodoItem[] = await findTodos();
   todoList.innerHTML = '';
   updateListLength(tasks);
-  tasks.forEach((task, index) => createTaskItem(index,task, todoList));
+  tasks.forEach((task, index) => createTaskItem(index, task, todoList));
 };
 
 export async function setup(input: HTMLInputElement, todoList: HTMLUListElement, clearButton: HTMLButtonElement) {
@@ -181,5 +179,58 @@ export async function setup(input: HTMLInputElement, todoList: HTMLUListElement,
 
   broadcast.on('message', async () => {
     await renderTasks(todoList); // Re-render on BroadcastChannel changes
+  });
+
+  const qrCodeImage = document.getElementById('qr-code') as HTMLImageElement;
+  new QrCodeWithLogo({
+    image: qrCodeImage,
+    content: document.location.href,
+    width: 380,
+    logo: {
+      src: 'jitpomi_white.png',
+      bgColor: 'rgb(37 39 60)',
+      borderRadius: 100,
+      borderWidth: 2,
+    },
+    dotsOptions: {
+      color: 'rgb(37 39 60)',
+    },
+    cornersOptions: {
+      color: 'rgb(37 39 60)',
+      type: 'circle',
+    },
+  });
+  const shareDialog = document.getElementById('share-dialog') as HTMLDialogElement;
+  const shareButton = document.getElementById('shareButton') as HTMLButtonElement;
+  shareButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    shareDialog.showModal();
+    shareDialog.className = 'flex flex-col overflow-y-auto no-scrollbar mx-auto my-48 p-3 bg-[rgb(37,39,60)]';
+  });
+  const closeQrCodeButton = document.getElementById('closeQrCode') as HTMLAnchorElement;
+  closeQrCodeButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    shareDialog.className = '';
+    shareDialog.close();
+  });
+  const copyQrCodeButton = document.getElementById('copyQrCode') as HTMLAnchorElement;
+  copyQrCodeButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    // Simulate copy to clipboard action (replace this with actual link copy logic if needed)
+    navigator.clipboard.writeText(document.location.href).then(() => {
+      // Change anchor text to "COPIED" and disable it
+      const labelSpan = copyQrCodeButton.querySelector('span.relative') as HTMLSpanElement;
+      labelSpan.textContent = 'COPIED LINK';
+      copyQrCodeButton.classList.add('pointer-events-none', 'bg-purple-600'); // Disable the anchor
+      copyQrCodeButton.classList.remove('hover:bg-blue-700');
+
+      // Re-enable after 3 seconds
+      setTimeout(() => {
+        labelSpan.textContent = 'COPY LINK'; // Restore text
+        copyQrCodeButton.classList.remove('pointer-events-none', 'bg-purple-600'); // Enable the anchor
+      }, 3000);
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+    });
   });
 }

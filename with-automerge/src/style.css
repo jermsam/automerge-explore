@@ -89,6 +89,8 @@ body {
     .fa-times {
         @apply text-[rgb(119,122,146)] text-[1.1rem] opacity-40;
     }
+
+
 }
 
 @layer utilities {

@@ -11,10 +11,20 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
      
        <section id="container" class="absolute  w-full">
           <div class="mb-4 z-10  p-4 sticky top-0 flex flex-col gap-2 bg-[url('assets/bg-mobile-dark.jpg')] md:bg-[url('assets/bg-desktop-dark.jpg')] bg-cover bg-no-repeat bg-center">
-           <header class=" max-w-xl mx-auto px-4 flex w-full  justify-between gap-10 items-center mt-[2rem] mb-[1rem]">
-            <h1 class="text-gray-50  text-xl md:text-2xl font-bold">TODO</h1>
-            <span class="inline-block w-6 h-6 bg-[url('assets/sun.svg')] bg-contain bg-no-repeat"></span>
-          </header>
+           <header class="text-gray-50 max-w-xl mx-auto px-4 flex w-full  justify-between gap-10 items-center mt-[2rem] mb-[1rem]">
+            <h1 class="text-xl md:text-2xl font-bold">TODO</h1>
+            <buttton id="shareButton" class="rounded-full p-2 cursor-pointer hover:shadow-2xl hover:bg-gray-800 hover:bg-opacity-50 active:bg-opacity-5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                  <g fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                      <circle cx="18" cy="5" r="3"/>
+                      <circle cx="6" cy="12" r="3"/>
+                      <circle cx="18" cy="19" r="3"/>
+                      <path d="m8.59 13.51l6.83 3.98m-.01-10.98l-6.82 3.98"/>
+                  </g>
+              </svg>            
+            </buttton>
+
+           </header>
           <div class="max-w-xl mx-auto  w-full">
           <input
             id="todo-input"
@@ -47,6 +57,49 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
                 </div>
        
           </div>
+          
+         
+          <dialog  id="share-dialog" class="max-w-xl">
+            <div  class="flex flex-col items-center gap-5  rounded w-full h-full p-3">
+               <div class="w-64 h-64">
+                <image id="qr-code" class="w-full h-full object-cover bg-gray-400"/>
+               </div>
+              <div class="flex justify-between gap-5 max-w-xl">
+              
+                  <a id="copyQrCode" class="relative cursor-copy inline-flex items-center justify-center px-6 py-3 overflow-hidden font-bold text-white rounded-md shadow-2xl group">
+                  <span class="absolute inset-0 w-full h-full transition duration-300 ease-out opacity-0 bg-gradient-to-br from-pink-600 via-purple-700 to-blue-400 group-hover:opacity-100"></span>
+                  <!-- Top glass gradient -->
+                  <span class="absolute top-0 left-0 w-full bg-gradient-to-b from-white to-transparent opacity-5 h-1/3"></span>
+                  <!-- Bottom gradient -->
+                  <span class="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-white to-transparent opacity-5"></span>
+                  <!-- Left gradient -->
+                  <span class="absolute bottom-0 left-0 w-4 h-full bg-gradient-to-r from-white to-transparent opacity-5"></span>
+                  <!-- Right gradient -->
+                  <span class="absolute bottom-0 right-0 w-4 h-full bg-gradient-to-l from-white to-transparent opacity-5"></span>
+                  <span class="absolute inset-0 w-full h-full border border-white rounded-md opacity-10"></span>
+                  <span class="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-5"></span>
+                  <span class="relative text-sm">COPY LINK</span>
+                  </a> 
+                  
+                  <a id="closeQrCode" class="relative cursor-pointer inline-flex items-center justify-center px-6 py-3 overflow-hidden font-bold text-white rounded-md shadow-2xl group">
+                  <span class="absolute inset-0 w-full h-full transition duration-300 ease-out opacity-0 bg-gradient-to-br from-pink-600 via-purple-700 to-blue-400 group-hover:opacity-100"></span>
+                  <!-- Top glass gradient -->
+                  <span class="absolute top-0 left-0 w-full bg-gradient-to-b from-white to-transparent opacity-5 h-1/3"></span>
+                  <!-- Bottom gradient -->
+                  <span class="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-white to-transparent opacity-5"></span>
+                  <!-- Left gradient -->
+                  <span class="absolute bottom-0 left-0 w-4 h-full bg-gradient-to-r from-white to-transparent opacity-5"></span>
+                  <!-- Right gradient -->
+                  <span class="absolute bottom-0 right-0 w-4 h-full bg-gradient-to-l from-white to-transparent opacity-5"></span>
+                  <span class="absolute inset-0 w-full h-full border border-white rounded-md opacity-10"></span>
+                  <span class="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-5"></span>
+                  <span class="relative text-sm">CLOSE</span>
+                  </a>               
+              
+              </div>
+            </div>
+          </dialog>
+        
        </section>
      </main>
 
