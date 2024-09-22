@@ -1,4 +1,4 @@
-import { DocHandle, Repo, isValidAutomergeUrl} from '@automerge/automerge-repo';
+import { DocHandle, Repo, isValidAutomergeUrl, } from '@automerge/automerge-repo';
 import {BroadcastChannelNetworkAdapter} from '@automerge/automerge-repo-network-broadcastchannel';
 import {IndexedDBStorageAdapter} from '@automerge/automerge-repo-storage-indexeddb';
 import {TodoItem} from './types';
@@ -17,14 +17,7 @@ export const getOrCreateHandle =(docId: string) =>{
   if (isValidAutomergeUrl(docId)) {
     handle = repo.find(docId);
   } else {
-    handle = repo.create<{ tasks: TodoItem[] }>({
-      tasks: [
-        {
-          contents: 'Explore Automerge',
-          completed: false,
-        },
-      ],
-    });
+    handle = repo.create<{ tasks: TodoItem[] }>();
   }
 
   return handle;

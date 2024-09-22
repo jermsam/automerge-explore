@@ -2,11 +2,49 @@ import type {TodoItem} from './types';
 // import {taskList} from './data.ts';
 import {broadcast, getOrCreateHandle} from './handle-automerge.ts';
 import QrCodeWithLogo from 'qrcode-with-logos';
-
+import HistoryManager from './history-manager.ts';
+import * as Automerge from '@automerge/automerge';
+import {Doc} from '@automerge/automerge-repo';
 // Get or create the document
 const rootDocUrl = document.location.hash.substring(1);
 
-const handle = getOrCreateHandle(rootDocUrl);
+let handle = getOrCreateHandle(rootDocUrl);
+
+let localChanges = [];  // Track local changes
+let remoteChanges = [];  // Track local changes
+
+// Listen for document changes
+handle.on("change", (arg) => {
+  const actorId = Automerge.getActorId(arg.doc); // Get the current actor ID
+  const changes = Automerge.getHistory(arg.doc);
+
+  changes.forEach(entry => {
+    if (entry.change.actor === actorId) {
+      // Local change detected
+      console.log("Local change:", entry);
+      localChanges.push(entry);
+    } else {
+      // Remote change detected
+      console.log("Remote change:", entry);
+      remoteChanges.push(entry);
+      // if we wanted to group remote histories by actor
+      // const peerChanges = remoteHistoryLog.get(actorId) || [];
+      // peerChanges.push(entry);  // Add the new change to the remote actor's log
+      //
+      // // Store the updated log for this remote actor
+      // remoteHistoryLog.set(actorId, peerChanges);
+    }
+  });
+});
+
+let historyManager = new HistoryManager(handle,{
+ undoMode: 'global',
+  conflictResolver: async (_key, conflicts) => {
+    return Object.values(conflicts).pop() // Last one wins
+  }
+});
+// historyManager.setDocHandle(handle)
+
 
 // Update the URL in the browser
 document.location.hash = handle.url;
@@ -18,7 +56,7 @@ function scrollToBottom(list: HTMLUListElement) {
 }
 
 
-function updateListLength(tasks: TodoItem[]) {
+function updateListLength(tasks: TodoItem[] = []) {
   tasks = tasks.filter(task => !task.completed);
   let count = tasks.length;
   const listLength = document.getElementById('list-length') as HTMLElement;
@@ -28,7 +66,7 @@ function updateListLength(tasks: TodoItem[]) {
 
 const findTodos = async () => {
   const doc = await handle.doc();
-  return doc?.tasks;
+  return doc?.tasks || [];
 };
 
 const updateTodo = (index: any, newValue: TodoItem) => {
@@ -44,7 +82,8 @@ const deleteTodo = (index: any) => {
 };
 
 const deleteCompletedTasks = () => {
-  handle.change((doc) => {
+
+ handle.change((doc) => {
     // Iterate over the tasks array in reverse to avoid index issues when splicing
     for (let i = doc.tasks.length - 1; i >= 0; i--) {
       const task = doc.tasks[i];
@@ -135,6 +174,15 @@ export async function setup(input: HTMLInputElement, todoList: HTMLUListElement,
     if (!(event.key === 'Enter' || event.code === 'Enter')) return;
     // Do something
     const newTask = input.value;
+    if (!handle.isReady()) {
+     handle = getOrCreateHandle(rootDocUrl)
+      historyManager = new HistoryManager(handle,{
+        // undoMode: 'global',
+        conflictResolver: async (_key, conflicts) => {
+          return Object.values(conflicts).pop() // Last one wins
+        }
+      });
+    }
     handle.change((doc) => {
       doc.tasks.push({contents: newTask, completed: false});
     });
@@ -233,4 +281,24 @@ export async function setup(input: HTMLInputElement, todoList: HTMLUListElement,
       console.error('Failed to copy text: ', err);
     });
   });
+
+  const undoButton = document.getElementById('undoButton') as HTMLAnchorElement;
+  undoButton.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const doc = await handle.doc() as Doc<{ tasks: TodoItem[] }>;
+    const history = Automerge.getHistory(doc);
+
+    history.forEach((state, idx) => {
+      if(! state.snapshot) return
+      console.log(`Version ${idx}:`, state.snapshot.tasks);
+    });
+
+    // historyManager.undo()
+  })
+
+  const redoButton = document.getElementById('redoButton') as HTMLAnchorElement;
+  redoButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    historyManager.redo()
+  })
 }
