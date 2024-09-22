@@ -2,7 +2,6 @@ import type {TodoItem} from './types';
 // import {taskList} from './data.ts';
 import {broadcast, getOrCreateHandle} from './handle-automerge.ts';
 import QrCodeWithLogo from 'qrcode-with-logos';
-import HistoryManager from './history-manager.ts';
 import * as Automerge from '@automerge/automerge';
 import {Doc} from '@automerge/automerge-repo';
 // Get or create the document
@@ -36,15 +35,6 @@ handle.on("change", (arg) => {
     }
   });
 });
-
-let historyManager = new HistoryManager(handle,{
- undoMode: 'global',
-  conflictResolver: async (_key, conflicts) => {
-    return Object.values(conflicts).pop() // Last one wins
-  }
-});
-// historyManager.setDocHandle(handle)
-
 
 // Update the URL in the browser
 document.location.hash = handle.url;
@@ -174,15 +164,6 @@ export async function setup(input: HTMLInputElement, todoList: HTMLUListElement,
     if (!(event.key === 'Enter' || event.code === 'Enter')) return;
     // Do something
     const newTask = input.value;
-    if (!handle.isReady()) {
-     handle = getOrCreateHandle(rootDocUrl)
-      historyManager = new HistoryManager(handle,{
-        // undoMode: 'global',
-        conflictResolver: async (_key, conflicts) => {
-          return Object.values(conflicts).pop() // Last one wins
-        }
-      });
-    }
     handle.change((doc) => {
       doc.tasks.push({contents: newTask, completed: false});
     });
@@ -293,12 +274,11 @@ export async function setup(input: HTMLInputElement, todoList: HTMLUListElement,
       console.log(`Version ${idx}:`, state.snapshot.tasks);
     });
 
-    // historyManager.undo()
   })
 
   const redoButton = document.getElementById('redoButton') as HTMLAnchorElement;
   redoButton.addEventListener('click', (event) => {
     event.preventDefault();
-    historyManager.redo()
+
   })
 }

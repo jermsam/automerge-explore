@@ -108,8 +108,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
                   <span class="absolute inset-0 w-full h-full border border-white rounded-md opacity-10"></span>
                   <span class="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-5"></span>
                   <span class="relative text-sm">CLOSE</span>
-                  </a>               
-              
+                  </a>                      
               </div>
             </div>
           </dialog>
@@ -123,6 +122,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
 setup(
   document.querySelector<HTMLInputElement>('#todo-input')!,
-  document.querySelector<HTMLUListElement>('#todo-list')!,
-  document.querySelector<HTMLButtonElement>('#clear-btn')!
+document.querySelector<HTMLUListElement>('#todo-list')!,
+document.querySelector<HTMLButtonElement>('#clear-btn')!
 )
