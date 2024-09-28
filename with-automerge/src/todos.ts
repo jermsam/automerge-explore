@@ -1,40 +1,13 @@
 import type {TodoItem} from './types';
-// import {taskList} from './data.ts';
 import {broadcast, getOrCreateHandle} from './handle-automerge.ts';
 import QrCodeWithLogo from 'qrcode-with-logos';
-import * as Automerge from '@automerge/automerge';
-import {Doc} from '@automerge/automerge-repo';
+import VersionManager from './version-management/version-manager.ts';
 // Get or create the document
 const rootDocUrl = document.location.hash.substring(1);
 
 let handle = getOrCreateHandle(rootDocUrl);
 
-let localChanges = [];  // Track local changes
-let remoteChanges = [];  // Track local changes
-
-// Listen for document changes
-handle.on("change", (arg) => {
-  const actorId = Automerge.getActorId(arg.doc); // Get the current actor ID
-  const changes = Automerge.getHistory(arg.doc);
-
-  changes.forEach(entry => {
-    if (entry.change.actor === actorId) {
-      // Local change detected
-      console.log("Local change:", entry);
-      localChanges.push(entry);
-    } else {
-      // Remote change detected
-      console.log("Remote change:", entry);
-      remoteChanges.push(entry);
-      // if we wanted to group remote histories by actor
-      // const peerChanges = remoteHistoryLog.get(actorId) || [];
-      // peerChanges.push(entry);  // Add the new change to the remote actor's log
-      //
-      // // Store the updated log for this remote actor
-      // remoteHistoryLog.set(actorId, peerChanges);
-    }
-  });
-});
+const versionManager = new VersionManager(handle);
 
 // Update the URL in the browser
 document.location.hash = handle.url;
@@ -149,8 +122,8 @@ function createTaskItem(index: number, task: TodoItem, todoList: HTMLUListElemen
 }
 
 
-const renderTasks = async (todoList: HTMLUListElement) => {
-  let tasks: TodoItem[] = await findTodos();
+const renderTasks = async (todoList: HTMLUListElement, defaultTasks?:TodoItem[] ) => {
+  let tasks: TodoItem[] = defaultTasks || await findTodos();
   todoList.innerHTML = '';
   updateListLength(tasks);
   tasks.forEach((task, index) => createTaskItem(index, task, todoList));
@@ -266,19 +239,20 @@ export async function setup(input: HTMLInputElement, todoList: HTMLUListElement,
   const undoButton = document.getElementById('undoButton') as HTMLAnchorElement;
   undoButton.addEventListener('click', async (event) => {
     event.preventDefault();
-    const doc = await handle.doc() as Doc<{ tasks: TodoItem[] }>;
-    const history = Automerge.getHistory(doc);
-
-    history.forEach((state, idx) => {
-      if(! state.snapshot) return
-      console.log(`Version ${idx}:`, state.snapshot.tasks);
-    });
-
+    if (versionManager.canUndo()) {
+      console.log('Undo is available');
+      versionManager.undo();
+    }
+    await renderTasks(todoList)
   })
 
   const redoButton = document.getElementById('redoButton') as HTMLAnchorElement;
-  redoButton.addEventListener('click', (event) => {
+  redoButton.addEventListener('click', async (event) => {
     event.preventDefault();
-
+    if (versionManager.canRedo()) {
+      console.log('Redo is available');
+      versionManager.redo();
+    }
+    await renderTasks(todoList)
   })
 }

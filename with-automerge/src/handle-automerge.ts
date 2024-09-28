@@ -17,7 +17,9 @@ export const getOrCreateHandle =(docId: string) =>{
   if (isValidAutomergeUrl(docId)) {
     handle = repo.find(docId);
   } else {
-    handle = repo.create<{ tasks: TodoItem[] }>();
+    handle = repo.create<{ tasks: TodoItem[] }>({
+      tasks: [],
+    });
   }
 
   return handle;
