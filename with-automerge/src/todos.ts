@@ -2,6 +2,8 @@ import type {TodoItem} from './types';
 import {broadcast, getOrCreateHandle} from './handle-automerge.ts';
 import QrCodeWithLogo from 'qrcode-with-logos';
 import VersionManager from './version-management/version-manager.ts';
+
+
 // Get or create the document
 const rootDocUrl = document.location.hash.substring(1);
 
@@ -237,6 +239,7 @@ export async function setup(input: HTMLInputElement, todoList: HTMLUListElement,
   });
 
   const undoButton = document.getElementById('undoButton') as HTMLAnchorElement;
+  
   undoButton.addEventListener('click', async (event) => {
     event.preventDefault();
     if (versionManager.canUndo()) {

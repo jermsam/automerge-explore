@@ -29,6 +29,7 @@ export default class VersionManager<T> {
     
     // Listen for changes and track document changes
     this.handle.on('change', this.trackChanges.bind(this));
+    
   }
   
   // Check if the document is the root using Reflect
